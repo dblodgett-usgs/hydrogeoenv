@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=dblodgett-usgs/hydrogeoenv-r:latest
+ARG BASE_CONTAINER=dblodgett/hydrogeoenv-r:latest
 
 FROM ${BASE_CONTAINER}
 
