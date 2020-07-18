@@ -2,7 +2,7 @@ ARG BASE_CONTAINER=ubuntu:latest
 
 FROM ${BASE_CONTAINER}
 
-LABEL maintainer="David Blodgett <dblodgett@usgs.gov>"
+LABEL maintainer="Taher Chegini <cheginit.gmail.com>"
 ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
@@ -22,6 +22,7 @@ RUN apt-get install -y \
     libnetcdff-dev \
     gfortran \
     liblapack-dev \
+    libblas-dev \
     libspatialindex-dev \
     libspatialindex6 \
     python3-pip
