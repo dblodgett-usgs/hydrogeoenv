@@ -12,4 +12,7 @@ RUN Rscript -e 'devtools::install_github("usgs-r/nhdplusTools")'
 
 RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor")'
 
-RUN jupyter lab build
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
+
+WORKDIR $HOME

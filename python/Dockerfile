@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ubuntu:latest
+ARG BASE_CONTAINER=dblodgett/hydrogeoenv-linux:latest
 
 FROM ${BASE_CONTAINER}
 
@@ -7,35 +7,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    pkg-config
-
-RUN apt-get install -y \
-    libgdal-dev \
-    gdal-bin \
-    libnetcdff-dev \
-    gfortran \
-    liblapack-dev \
-    libblas-dev \
-    libspatialindex-dev \
-    libspatialindex6 \
-    python3-pip
-
-RUN apt-get autoremove -y && \
-    apt-get autoclean
+RUN pip3 install -U --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`
 
 RUN pip3 install -U \
-    numpy \
+    scipy \
+    numpy
+
+RUN pip3 install \
     hydrodata \
     dask \
     netCDF4 \
-    bottleneck \
     descartes \
     sparse \
     cmocean \
@@ -49,7 +30,12 @@ RUN pip3 install -U \
     osmnx \
     pint \
     numbagg \
-    jupyterlab
+    git+https://github.com/eea/odfpy \
+    sympy \
+    matplotlib \
+    pandas
+
+    # bottleneck \
 
 USER $NB_UID
 

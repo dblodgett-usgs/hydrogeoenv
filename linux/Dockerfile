@@ -1,14 +1,25 @@
-ARG BASE_CONTAINER=jupyter/minimal-notebook:76402a27fd13
+ARG BASE_CONTAINER=ubuntu:18.04
 
 FROM ${BASE_CONTAINER}
 
 LABEL maintainer="David Blodgett <dblodgett@usgs.gov>"
 
+ARG NB_USER="jovyan"
+ARG NB_UID="1000"
+ARG NB_GID="100"
+
 USER root
 
 # From https://hub.docker.com/r/rocker/r-ubuntu/dockerfile
+# and https://hub.docker.com/r/jupyter/base-notebook/dockerfile
+# and https://hub.docker.com/r/jupyter/minimal-notebook/dockerfile        
+# Install all OS dependencies for fully functional notebook server
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive \
+    apt-get install -yq --no-install-recommends \
+        sudo \
+        fonts-liberation \
+        run-one \
         software-properties-common \
         dirmngr \
         ed \
@@ -19,39 +30,121 @@ RUN apt-get update \
         ca-certificates \
         apt-transport-https \
         curl \
-        gnupg-agent
+        gnupg-agent \
+        pkg-config \
+        python3-pip \
+        build-essential \
+        emacs-nox \
+        vim-tiny \
+        git \
+        inkscape \
+        jed \
+        libsm6 \
+        libxext-dev \
+        libxrender1 \
+        lmodern \
+        netcat \
+        python-dev \
+        # ---- nbconvert dependencies ----
+        texlive-xetex \
+        texlive-fonts-recommended \
+        texlive-plain-generic \
+        # Optional dependency
+        texlive-fonts-extra \
+        # ----
+        tzdata \
+        unzip \
+        nano \
+        && apt-get clean && rm -rf /var/lib/apt/lists/*
+    
+RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
+    && sudo apt-get install -y nodejs
 
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen en_US.utf8 \
     && /usr/sbin/update-locale LANG=en_US.UTF-8
 
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
+ENV SHELL=/bin/bash \
+    NB_USER=$NB_USER \
+    NB_UID=$NB_UID \
+    NB_GID=$NB_GID \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    HOME=/home/$NB_USER
+    
+COPY fix-permissions /usr/local/bin/fix-permissions
+RUN chmod a+rx /usr/local/bin/fix-permissions
+
+# Enable prompt color in the skeleton .bashrc before creating the default NB_USER
+RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
+
+# Create NB_USER wtih name jovyan user with UID=1000 and in the 'users' group
+# and make sure these dirs are writable by the `users` group.
+RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
+    sed -i.bak -e 's/^%admin/#%admin/' /etc/sudoers && \
+    sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
+    useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
+    chmod g+w /etc/passwd && \
+    fix-permissions $HOME
+    
+ARG PYTHON_VERSION=default
+
+# Setup work directory for backward-compatibility
+RUN mkdir /home/$NB_USER/work && \
+    fix-permissions /home/$NB_USER
+    
+EXPOSE 8888
+
+RUN pip3 install -U setuptools
+
+# Install jupyterlab and jupytext
+RUN pip3 install -U setuptools jupyterlab jupytext ipymd \
+    && jupyter lab build
+   
+# install DOI root certificate so things work on the DOI network.
+COPY DOIRootCA2.cer /usr/local/share/ca-certificates/DOIRootCA2.crt
+
+RUN chmod 644 /usr/local/share/ca-certificates/DOIRootCA2.crt && update-ca-certificates
+
+# Add Tini
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
+# Configure container startup
+ENTRYPOINT ["/tini", "-g", "--"]
+CMD ["start-notebook.sh"]
+
+# Copy local files as late as possible to avoid cache busting
+COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
+COPY jupyter_notebook_config.py /etc/jupyter/
+
+# Fix permissions on /etc/jupyter as root
+RUN fix-permissions /etc/jupyter/
+
+RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 # from: https://hub.docker.com/r/rocker/tidyverse/dockerfile
+# and https://github.com/rocker-org/geospatial/blob/master/Dockerfile
 RUN apt-get update -qq \
     && apt-get -y --no-install-recommends install \
         libxml2-dev \
         libcairo2-dev \
         libsqlite-dev \
-        libmariadbd-dev \
-        libmariadbclient-dev \
         libpq-dev \
         libssh2-1-dev \
         unixodbc-dev \
         libsasl2-dev \
         libssl-dev \
         libcurl4-openssl-dev \
-        libsodium-dev
- 
-# from: https://github.com/rocker-org/geospatial/blob/master/Dockerfile
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+        libsodium-dev \
         lbzip2 \
         libfftw3-dev \
         libmysqlclient-dev \
         default-libmysqlclient-dev \
         libgdal-dev \
+        gdal-bin \
         libgeos-dev \
         libgsl0-dev \
         libgl1-mesa-dev \
@@ -64,6 +157,7 @@ RUN apt-get update \
         libproj-dev \
         libprotobuf-dev \
         libnetcdf-dev \
+        libnetcdff-dev \
         libsqlite3-dev \
         libssl-dev \
         libudunits2-dev \
@@ -73,20 +167,25 @@ RUN apt-get update \
         sqlite3 \
         tk-dev \
         libv8-dev \
-        unixodbc-dev
+        unixodbc-dev \
+        gfortran \
+        liblapack-dev \
+        libblas-dev \
+        libspatialindex-dev \
+        python3 \
+        python3-dev \
+        build-essential \
+        libffi-dev \
+        libxslt1-dev \
+        zlib1g-dev \
+        python-pip
 
-# Install numpy, scipy matplotlib, and jupytext
-RUN pip install scipy matplotlib pandas sympy jupytext ipymd git+https://github.com/eea/odfpy
+# # not available?        libspatialindex6
 
-# install DOI root certificate so things work on the DOI network.
-COPY DOIRootCA2.cer /usr/local/share/ca-certificates/DOIRootCA2.crt
+RUN apt-get autoremove -y && \
+    apt-get autoclean
 
-RUN chmod 644 /usr/local/share/ca-certificates/DOIRootCA2.crt && update-ca-certificates
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
 
-# Install docker
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
-               sudo add-apt-repository \
-                  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-                  $(lsb_release -cs) \
-                  stable" && \
-               apt-get -y install docker-ce docker-ce-cli containerd.io
+WORKDIR $HOME

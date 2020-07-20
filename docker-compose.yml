@@ -10,6 +10,5 @@ services:
     volumes:
       - ./workspace:/jupyter
     command: >
-      sh -c "usermod -a -G docker jovyan &&
-             start.sh jupyter lab --LabApp.token='' --ContentsManager.root_dir='/jupyter' --NotebookApp.notebook_dir='/jupyter' --NotebookApp.contents_manager_class='ipymd.IPymdContentsManager' --NotebookApp.contents_manager_class='jupytext.TextFileContentsManager'"
+      sh -c "start.sh jupyter lab --LabApp.token='' --ContentsManager.root_dir='/jupyter' --NotebookApp.notebook_dir='/jupyter' --NotebookApp.contents_manager_class='ipymd.IPymdContentsManager' --NotebookApp.contents_manager_class='jupytext.TextFileContentsManager'"
              
