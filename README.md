@@ -28,12 +28,13 @@ Once started, a jupyterlab interface will then be available via http://localhost
 In this mode, docker is kicked off with a set of commands to execute like:
 
 ```
-docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter \
---env HYDREG=10L dblodgett/hydrogeoenv-custom:latest R -e "rmarkdown::render('/jupyter/NHD_navigate.Rmd', output_file='/jupyter/NHD_navigate_10L.html')" -e "rmarkdown::render('/jupyter/POI_Collapse.Rmd', output_file='/jupyter/POI_Collapse_10L.html')" 
+docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter dblodgett/hydrogeoenv-custom:latest R -e "rmarkdown::render('/jupyter/plot_nhdplus.Rmd', output_file='/jupyter/build/plot_nhdplus.html')"
+mv workspace/build/* docs/demo/nhdplusTools/
 ```
 
 ```
-docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter dblodgett/hydrogeoenv-custom:latest jupyter nbconvert --ExecutePreprocessor.timeout=360 --to=html --execute /jpyter/quickguide
+docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter dblodgett/hydrogeoenv-custom:latest jupyter nbconvert --ExecutePreprocessor.timeout=360 --to html --output /jupyter/build/hydrodata_quickguide.md --execute /jupyter/hydrodata_quickguide.ipynb
+mv workspace/build/* docs/demo/hydrodata/
 ````
 
 ## Disclaimer

@@ -67,6 +67,9 @@ RUN install2.r --error \
     svglite \
     sbtools
 
+RUN apt-get update -qq \
+        && apt-get -y --no-install-recommends install pandoc
+
 USER $NB_UID
 
 RUN Rscript -e 'IRkernel::installspec()'

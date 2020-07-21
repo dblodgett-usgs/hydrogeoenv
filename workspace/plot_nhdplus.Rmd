@@ -1,0 +1,21 @@
+---
+title: "Plot NHDPlus Demo"
+author: "dblodgett@usgs.gov"
+output: rmarkdown::html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width=6, 
+  fig.height=4
+)
+options("rgdal_show_exportToProj4_warnings"="none")
+```
+
+```{r nwis_simple1, message=FALSE} 
+library(nhdplusTools)
+
+plot_nhdplus("05428500")
+```
