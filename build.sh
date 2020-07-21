@@ -19,5 +19,6 @@ docker build -t $custom --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-r:$r_TA
 if [ "$push" == "TRUE" ]; then
   docker push $linux
   docker push $r
+  docker push $python
   docker push $custom
 fi

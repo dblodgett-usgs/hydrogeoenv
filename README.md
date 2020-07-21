@@ -29,8 +29,12 @@ In this mode, docker is kicked off with a set of commands to execute like:
 
 ```
 docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter \
---env HYDREG=10L dblodgett/gfv2:v0.12 R -e "rmarkdown::render('/jupyter/NHD_navigate.Rmd', output_file='/jupyter/NHD_navigate_10L.html')" -e "rmarkdown::render('/jupyter/POI_Collapse.Rmd', output_file='/jupyter/POI_Collapse_10L.html')" 
+--env HYDREG=10L dblodgett/hydrogeoenv-custom:latest R -e "rmarkdown::render('/jupyter/NHD_navigate.Rmd', output_file='/jupyter/NHD_navigate_10L.html')" -e "rmarkdown::render('/jupyter/POI_Collapse.Rmd', output_file='/jupyter/POI_Collapse_10L.html')" 
 ```
+
+```
+docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter dblodgett/hydrogeoenv-custom:latest jupyter nbconvert --ExecutePreprocessor.timeout=360 --to=html --execute /jpyter/quickguide
+````
 
 ## Disclaimer
 
