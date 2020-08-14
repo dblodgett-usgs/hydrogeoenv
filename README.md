@@ -37,7 +37,7 @@ see output: https://dblodgett-usgs.github.io/hydrogeoenv/demo/nhdplusTools/plot_
 docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter dblodgett/hydrogeoenv-custom:latest jupyter nbconvert --ExecutePreprocessor.timeout=360 --to html --output /jupyter/build/plot_nhdplus_python.html --execute /jupyter/plot_nhdplus_python.ipynb
 mv workspace/build/* docs/demo/hydrodata/
 ````
-See output: https://dblodgett-usgs.github.io/hydrogeoenv/demo/hydrodata/hydrodata_quickguide.html
+See output: https://dblodgett-usgs.github.io/hydrogeoenv/demo/hydrodata/plot_nhdplus_python.html
 
 ## Disclaimer
 
