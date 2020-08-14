@@ -8,6 +8,14 @@ This repository contains three Dockerfiles.
 It would make sense to add a fourth `python` Dockerfile but at this time, no significant `python` work has been applied in the workflows that these containers support.
 
 ## Usage
+
+NOTE: When using these containers, consider rerunning a docker pull command regularly:
+
+```bash
+$ docker pull dblodgett/hydrogeoenv-custom:latest
+```
+
+As the project progresses, tagged versions will be established and those should be relied on going forward. 
  
 There are two usage patterns for this system of containers.
 
