@@ -54,6 +54,7 @@ RUN apt-get update \
         # ----
         tzdata \
         unzip \
+        p7zip-full \
         nano \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
     
