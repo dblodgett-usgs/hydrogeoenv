@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  wbeep:
+  hgenv:
     image: dblodgett/hydrogeoenv-custom:latest
     container_name: hydrogeoenv
     user: root
@@ -10,5 +10,5 @@ services:
     volumes:
       - ./workspace:/jupyter
     command: >
-      sh -c "start.sh jupyter lab --LabApp.token='' --ContentsManager.root_dir='/jupyter' --NotebookApp.notebook_dir='/jupyter' --NotebookApp.contents_manager_class='ipymd.IPymdContentsManager' --NotebookApp.contents_manager_class='jupytext.TextFileContentsManager'"
+      start.sh jupyter lab --LabApp.token='' --ContentsManager.root_dir='/jupyter' --NotebookApp.notebook_dir='/jupyter' --NotebookApp.contents_manager_class='ipymd.IPymdContentsManager' --NotebookApp.contents_manager_class='jupytext.TextFileContentsManager'
              
