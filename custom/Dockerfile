@@ -12,6 +12,8 @@ RUN Rscript -e 'devtools::install_github("usgs-r/nhdplusTools")'
 
 RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor")'
 
+RUN pip3 install hydrodata
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
