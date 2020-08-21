@@ -10,10 +10,6 @@ USER root
 RUN pip3 install -U --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`
 
 RUN pip3 install -U \
-    scipy \
-    numpy
-
-RUN pip3 install \
     dask \
     bottleneck \
     netCDF4 \
