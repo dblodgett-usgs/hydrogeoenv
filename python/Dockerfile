@@ -14,7 +14,6 @@ RUN pip3 install -U \
     numpy
 
 RUN pip3 install \
-    hydrodata \
     dask \
     netCDF4 \
     descartes \
@@ -33,7 +32,8 @@ RUN pip3 install \
     git+https://github.com/eea/odfpy \
     sympy \
     matplotlib \
-    pandas
+    pandas \
+    hydrodata
 
     # bottleneck \
 
