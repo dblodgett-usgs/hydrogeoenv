@@ -28,7 +28,7 @@ RUN pip3 install -U \
     numbagg \
     sympy \
     hydrodata \
-    git+https://github.com/eea/odfpy \
+    git+https://github.com/eea/odfpy
 
 USER $NB_UID
 
