@@ -7,6 +7,8 @@ This repository contains three Dockerfiles.
 
 It would make sense to add a fourth `python` Dockerfile but at this time, no significant `python` work has been applied in the workflows that these containers support.
 
+A list of installed packages in the `custom` image is provided in [r_table.md](https://github.com/dblodgett-usgs/hydrogeoenv/blob/master/docs/r_table.md) and [python_table.md](https://github.com/dblodgett-usgs/hydrogeoenv/blob/master/docs/python_table.md) files in the `docs` folder.
+
 ## Usage
 
 NOTE: When using these containers, consider rerunning a docker pull command regularly:
