@@ -179,7 +179,8 @@ RUN apt-get update -qq \
         libffi-dev \
         libxslt1-dev \
         zlib1g-dev \
-        python-pip
+        python-pip \
+        llvmlite
 
 # # not available?        libspatialindex6
 
