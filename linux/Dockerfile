@@ -101,10 +101,10 @@ RUN mkdir /home/$NB_USER/work && \
     
 EXPOSE 8888
 
-RUN pip3 install -U setuptools
+RUN pip3 install -U setuptools wheel pip
 
 # Install jupyterlab and jupytext
-RUN pip3 install -U setuptools jupyterlab jupytext ipymd \
+RUN pip3 install -U jupyterlab jupytext ipymd \
     && jupyter lab build
    
 # install DOI root certificate so things work on the DOI network.
