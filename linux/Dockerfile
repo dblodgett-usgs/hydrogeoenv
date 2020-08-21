@@ -32,7 +32,6 @@ RUN apt-get update \
         curl \
         gnupg-agent \
         pkg-config \
-        python3-pip \
         build-essential \
         emacs-nox \
         vim-tiny \
@@ -56,6 +55,11 @@ RUN apt-get update \
         unzip \
         p7zip-full \
         nano \
+        # Python3 essentials
+        python3 \
+        python3-dev \
+        python3-pip \
+        python3-llvmlite \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
     
 RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
@@ -173,16 +177,11 @@ RUN apt-get update -qq \
         liblapack-dev \
         libblas-dev \
         libspatialindex-dev \
-        python3 \
-        python3-dev \
         build-essential \
         libffi-dev \
         libxslt1-dev \
         zlib1g-dev \
-        python-pip \
-        llvmlite
-
-# # not available?        libspatialindex6
+        libspatialindex-dev
 
 RUN apt-get autoremove -y && \
     apt-get autoclean
