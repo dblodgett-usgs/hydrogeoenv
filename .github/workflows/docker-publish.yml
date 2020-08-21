@@ -1,0 +1,57 @@
+name: Publish Docker
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Publish Linux
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          BASE_CONTAINER: ubuntu:bionic-20200630
+        with:
+          name: dblodgett/hydrogeoenv-linux
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: linux/Dockerfile
+          buildargs: BASE_CONTAINER
+          tags: "latest"
+
+      - name: Publish Python
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          BASE_CONTAINER: dblodgett/hydrogeoenv-linux
+        with:
+          name: dblodgett/hydrogeoenv-python
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: python/Dockerfile
+          buildargs: BASE_CONTAINER
+          tags: "latest"
+
+      - name: Publish R
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          BASE_CONTAINER: dblodgett/hydrogeoenv-python
+        with:
+          name: dblodgett/hydrogeoenv-r
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: r/Dockerfile
+          buildargs: BASE_CONTAINER
+          tags: "latest"
+
+      - name: Publish Custom
+        uses: elgohr/Publish-Docker-Github-Action@master
+        env:
+          BASE_CONTAINER: dblodgett/hydrogeoenv-r
+        with:
+          name: dblodgett/hydrogeoenv-custom
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          dockerfile: custom/Dockerfile
+          buildargs: BASE_CONTAINER
+          tags: "latest"
+
