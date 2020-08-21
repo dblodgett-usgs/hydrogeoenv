@@ -15,6 +15,7 @@ RUN pip3 install -U \
 
 RUN pip3 install \
     dask \
+    bottleneck \
     netCDF4 \
     descartes \
     sparse \
@@ -29,13 +30,9 @@ RUN pip3 install \
     osmnx \
     pint \
     numbagg \
-    git+https://github.com/eea/odfpy \
     sympy \
-    matplotlib \
-    pandas \
-    hydrodata
-
-    # bottleneck \
+    hydrodata \
+    git+https://github.com/eea/odfpy \
 
 USER $NB_UID
 
