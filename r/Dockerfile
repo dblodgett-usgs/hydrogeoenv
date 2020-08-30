@@ -65,6 +65,7 @@ RUN install2.r --error \
     systemfonts \
     leafpop \
     svglite \
+    reticulate \
     sbtools
 
 RUN apt-get update -qq \
