@@ -28,6 +28,7 @@ RUN pip3 install -U \
     numbagg \
     sympy \
     hydrodata \
+    mapclassify \
     git+https://github.com/eea/odfpy
 
 USER $NB_UID
