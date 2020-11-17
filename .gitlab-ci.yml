@@ -4,11 +4,14 @@ variables:
 stages:
   - docker
 
+services:
+  - name: code.chs.usgs.gov:5001/wma/hydrogeoenv:19.03.13-dind
+    alias: docker
+
 dockerize:
   stage: docker
   image:
-    - name: code.chs.usgs.gov:5001/wma/hydrogeoenv:19.03.13-dind
-      alias: docker
+    code.chs.usgs.gov:5001/wma/hydrogeoenv:19.03.13-dind
   variables:
     LINUX_TAG: wma/hydrogeoenv/linux:$CI_COMMIT_REF_SLUG
   before_script:
