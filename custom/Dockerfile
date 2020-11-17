@@ -24,6 +24,8 @@ RUN pip3 install -U \
     git+https://github.com/cheginit/pydaymet.git \
     git+https://github.com/cheginit/hydrodata.git
 
+RUN Rscript -e 'devtools::install_github("USGS-R/USGSmarkdowntemplates")'
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
