@@ -1,8 +1,6 @@
 build-docker:
   stage: build
-  image: docker:stable-git
-  services:
-    - docker:stable-dind
+  image: code.chs.usgs.gov:5001/usgs-chs/chs-library/docker/images/docker:19.03-dind
   variables:
     LINUX_TAG: wma/hydrogeoenv/linux:$CI_COMMIT_REF_SLUG
   before_script:
