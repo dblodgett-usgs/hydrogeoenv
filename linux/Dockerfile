@@ -12,7 +12,7 @@ USER root
 
 # From https://hub.docker.com/r/rocker/r-ubuntu/dockerfile
 # and https://hub.docker.com/r/jupyter/base-notebook/dockerfile
-# and https://hub.docker.com/r/jupyter/minimal-notebook/dockerfile        
+# and https://hub.docker.com/r/jupyter/minimal-notebook/dockerfile
 # Install all OS dependencies for fully functional notebook server
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive \
@@ -61,7 +61,7 @@ RUN apt-get update \
         python3-pip \
         python3-llvmlite \
         && apt-get clean && rm -rf /var/lib/apt/lists/*
-    
+
 RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
     && sudo apt-get install -y nodejs
 
@@ -77,9 +77,9 @@ ENV SHELL=/bin/bash \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8 \
     HOME=/home/$NB_USER
-    
-COPY fix-permissions /usr/local/bin/fix-permissions
-RUN chmod a+rx /usr/local/bin/fix-permissions
+
+COPY fix-permissions.sh /usr/local/bin/fix-permissions.sh
+RUN chmod a+rx /usr/local/bin/fix-permissions.sh
 
 # Enable prompt color in the skeleton .bashrc before creating the default NB_USER
 RUN sed -i 's/^#force_color_prompt=yes/force_color_prompt=yes/' /etc/skel/.bashrc
@@ -91,14 +91,14 @@ RUN echo "auth requisite pam_deny.so" >> /etc/pam.d/su && \
     sed -i.bak -e 's/^%sudo/#%sudo/' /etc/sudoers && \
     useradd -m -s /bin/bash -N -u $NB_UID $NB_USER && \
     chmod g+w /etc/passwd && \
-    fix-permissions $HOME
-    
+    fix-permissions.sh $HOME
+
 ARG PYTHON_VERSION=default
 
 # Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work && \
-    fix-permissions /home/$NB_USER
-    
+    fix-permissions.sh /home/$NB_USER
+
 EXPOSE 8888
 
 RUN pip3 install -U setuptools wheel pip
@@ -106,7 +106,7 @@ RUN pip3 install -U setuptools wheel pip
 # Install jupyterlab and jupytext
 RUN pip3 install -U jupyterlab jupytext ipymd \
     && jupyter lab build
-   
+
 # install DOI root certificate so things work on the DOI network.
 COPY DOIRootCA2.cer /usr/local/share/ca-certificates/DOIRootCA2.crt
 
@@ -126,9 +126,10 @@ COPY start.sh start-notebook.sh start-singleuser.sh /usr/local/bin/
 COPY jupyter_notebook_config.py /etc/jupyter/
 
 # Fix permissions on /etc/jupyter as root
-RUN fix-permissions /etc/jupyter/
+RUN fix-permissions.sh /etc/jupyter/
 
-RUN add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+RUN apt-get update -qq && \
+    add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 # from: https://hub.docker.com/r/rocker/tidyverse/dockerfile
 # and https://github.com/rocker-org/geospatial/blob/master/Dockerfile
