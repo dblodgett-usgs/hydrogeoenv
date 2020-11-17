@@ -6,7 +6,7 @@ stages:
 
 dockerize:
   stage: docker
-  image: code.chs.usgs.gov:5001/usgs-chs/chs-library/docker/images/docker:19.03-git
+  image: code.chs.usgs.gov:5001/wma/hydrogeoenv:stable-dind
   variables:
     LINUX_TAG: wma/hydrogeoenv/linux:$CI_COMMIT_REF_SLUG
   before_script:
