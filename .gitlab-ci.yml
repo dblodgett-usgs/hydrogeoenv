@@ -13,7 +13,7 @@ dockerize:
   image:
     code.chs.usgs.gov:5001/wma/hydrogeoenv:19.03.13-dind
   variables:
-    LINUX_TAG: wma/hydrogeoenv-linux:$CI_COMMIT_REF_SLUG
+    LINUX_TAG: wma/hydrogeoenv:linux-$CI_COMMIT_REF_SLUG
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin code.chs.usgs.gov:5001
   script:
