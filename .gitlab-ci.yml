@@ -4,7 +4,7 @@ build-docker:
   variables:
     LINUX_TAG: wma/hydrogeoenv/linux:$CI_COMMIT_REF_SLUG
   before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin code.chs.usgs.gov:5001
   script:
     - docker build -t $LINUX_TAG --build-arg BASE_CONTAINER=code.chs.usgs.gov:5001/wma/hydrogeoenv:bionic-20200630 linux/
     - docker push $IMAGE_TAG
