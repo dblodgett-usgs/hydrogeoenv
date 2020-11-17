@@ -5,6 +5,7 @@ build-docker:
     LINUX_TAG: wma/hydrogeoenv/linux:$CI_COMMIT_REF_SLUG
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://docker:2375
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin code.chs.usgs.gov:5001
   script:
