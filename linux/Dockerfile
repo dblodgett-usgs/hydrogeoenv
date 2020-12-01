@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ubuntu:18.04
+ARG BASE_CONTAINER=ubuntu:20.10
 
 FROM ${BASE_CONTAINER}
 
@@ -9,6 +9,19 @@ ARG NB_UID="1000"
 ARG NB_GID="100"
 
 USER root
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive \
+    apt-get install -yq --no-install-recommends \
+    ca-certificates
+
+# install DOI root certificate so things work on the DOI network.
+COPY DOIRootCA2.cer /usr/local/share/ca-certificates/DOIRootCA2.crt
+
+RUN chmod 644 /usr/local/share/ca-certificates/DOIRootCA2.crt && update-ca-certificates
+
+ENV PIP_CERT=/etc/ssl/certs/ca-certificates.crt \
+    NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
 
 # From https://hub.docker.com/r/rocker/r-ubuntu/dockerfile
 # and https://hub.docker.com/r/jupyter/base-notebook/dockerfile
@@ -27,7 +40,6 @@ RUN apt-get update \
         locales \
         vim-tiny \
         wget \
-        ca-certificates \
         apt-transport-https \
         curl \
         gnupg-agent \
@@ -107,11 +119,6 @@ RUN pip3 install -U setuptools wheel pip
 RUN pip3 install -U jupyterlab jupytext ipymd \
     && jupyter lab build
 
-# install DOI root certificate so things work on the DOI network.
-COPY DOIRootCA2.cer /usr/local/share/ca-certificates/DOIRootCA2.crt
-
-RUN chmod 644 /usr/local/share/ca-certificates/DOIRootCA2.crt && update-ca-certificates
-
 # Add Tini
 ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
@@ -128,8 +135,8 @@ COPY jupyter_notebook_config.py /etc/jupyter/
 # Fix permissions on /etc/jupyter as root
 RUN fix-permissions.sh /etc/jupyter/
 
-RUN apt-get update -qq && \
-    add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+# RUN apt-get update -qq && \
+#     add-apt-repository ppa:ubuntugis/ubuntugis-unstable
 
 # from: https://hub.docker.com/r/rocker/tidyverse/dockerfile
 # and https://github.com/rocker-org/geospatial/blob/master/Dockerfile
@@ -158,7 +165,7 @@ RUN apt-get update -qq \
         libhdf4-alt-dev \
         libhdf5-dev \
         libjq-dev \
-        liblwgeom-dev \
+        # liblwgeom-dev \
         libpq-dev \
         libproj-dev \
         libprotobuf-dev \
@@ -182,7 +189,10 @@ RUN apt-get update -qq \
         libffi-dev \
         libxslt1-dev \
         zlib1g-dev \
-        libspatialindex-dev
+        libspatialindex-dev \
+        libfribidi-dev \
+        libharfbuzz-dev \
+        pandoc
 
 RUN apt-get autoremove -y && \
     apt-get autoclean
