@@ -12,6 +12,8 @@ RUN Rscript -e 'devtools::install_github("usgs-r/nhdplusTools")'
 
 RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor")'
 
+RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hygeo")'
+
 RUN install2.r --error reticulate
 
 RUN pip3 install -U \

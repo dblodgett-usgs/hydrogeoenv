@@ -7,8 +7,7 @@ LABEL maintainer="David Blodgett <dblodgett@usgs.gov>"
 USER root
 
 # From https://hub.docker.com/r/rocker/r-ubuntu/dockerfile
-RUN add-apt-repository --enable-source --yes "ppa:marutter/rrutter4.0" \
-    && add-apt-repository --enable-source --yes "ppa:c2d4u.team/c2d4u4.0+"
+RUN add-apt-repository --enable-source --yes "ppa:marutter/rrutter4.0"
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -23,7 +22,7 @@ RUN apt-get update \
  	&& install.r docopt \
  	&& rm -rf /tmp/downloaded_packages/ /tmp/*.rds \
  	&& rm -rf /var/lib/apt/lists/*
-    
+
 RUN Rscript -e 'install.packages("BiocManager", repos="http://cran.us.r-project.org"); BiocManager::install("EBImage")'
 
 RUN install2.r --error \
@@ -60,7 +59,6 @@ RUN install2.r --error \
     geosphere \
     codetools \
     dataRetrieval \
-    IRkernel \
     RSQLite \
     systemfonts \
     leafpop \
@@ -68,8 +66,9 @@ RUN install2.r --error \
     reticulate \
     sbtools
 
-RUN apt-get update -qq \
-        && apt-get -y --no-install-recommends install pandoc
+RUN Rscript -e 'devtools::install_github("RBigData/pbdZMQ")'
+
+RUN install2.r --error --deps TRUE IRkernel
 
 USER $NB_UID
 
