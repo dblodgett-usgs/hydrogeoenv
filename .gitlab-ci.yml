@@ -13,11 +13,20 @@ dockerize:
   image:
     code.chs.usgs.gov:5001/wma/hydrogeoenv:19.03.13-dind
   variables:
-    LINUX_TAG: code.chs.usgs.gov:5001/wma/hydrogeoenv:linux-$CI_COMMIT_REF_SLUG
+    LINUX_TAG: code.chs.usgs.gov:5001/wma/hydrogeoenv:linux-latest
+    PYTHON_TAG: code.chs.usgs.gov:5001/wma/hydrogeoenv:python-latest
+    R_TAG: code.chs.usgs.gov:5001/wma/hydrogeoenv:r-latest
+    CUSTOM_TAG: code.chs.usgs.gov:5001/wma/hydrogeoenv:custom-latest
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login -u $CI_REGISTRY_USER --password-stdin code.chs.usgs.gov:5001
   script:
-    - docker build -t $LINUX_TAG --build-arg BASE_CONTAINER=code.chs.usgs.gov:5001/wma/hydrogeoenv:bionic-20200630 linux/
+    - docker build -t $LINUX_TAG --build-arg BASE_CONTAINER=code.chs.usgs.gov:5001/wma/hydrogeoenv:ubuntu-20.10 linux/
     - docker push $LINUX_TAG
+    - docker build -t $PYTHON_TAG --build-arg BASE_CONTAINER=code.chs.usgs.gov:5001/wma/hydrogeoenv:linux-latest python/
+    - docker push $PYTHON_TAG
+    - docker build -t $R_TAG --build-arg BASE_CONTAINER=code.chs.usgs.gov:5001/wma/hydrogeoenv:python-latest r/
+    - docker push $R_TAG
+    - docker build -t $CUSTOM_TAG --build-arg BASE_CONTAINER=code.chs.usgs.gov:5001/wma/hydrogeoenv:r-latest custom/
+    - docker push $CUSTOM_TAG
   tags:
     - chs-shared
