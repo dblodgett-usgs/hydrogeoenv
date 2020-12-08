@@ -9,7 +9,10 @@ USER root
 
 RUN pip3 install -U --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`
 
+RUN apt-get install -y libspatialindex-dev
+
 RUN pip3 install -U \
+    Rtree \
     dask \
     bottleneck \
     netCDF4 \
@@ -32,4 +35,3 @@ RUN pip3 install -U \
     git+https://github.com/eea/odfpy
 
 USER $NB_UID
-

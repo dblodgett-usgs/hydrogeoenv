@@ -57,7 +57,7 @@ RUN apt-get update \
         netcat \
         python-dev \
         # ---- nbconvert dependencies ----
-        texlive-xetex \
+        # texlive-xetex \
         texlive-fonts-recommended \
         texlive-plain-generic \
         # Optional dependency
@@ -80,6 +80,8 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - \
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
     && locale-gen en_US.utf8 \
     && /usr/sbin/update-locale LANG=en_US.UTF-8
+
+ARG NB_UID="1001"
 
 ENV SHELL=/bin/bash \
     NB_USER=$NB_USER \
@@ -140,62 +142,68 @@ RUN fix-permissions.sh /etc/jupyter/
 
 # from: https://hub.docker.com/r/rocker/tidyverse/dockerfile
 # and https://github.com/rocker-org/geospatial/blob/master/Dockerfile
-RUN apt-get update -qq \
-    && apt-get -y --no-install-recommends install \
-        libxml2-dev \
-        libcairo2-dev \
-        libsqlite-dev \
-        libpq-dev \
-        libssh2-1-dev \
-        unixodbc-dev \
-        libsasl2-dev \
-        libssl-dev \
-        libcurl4-openssl-dev \
-        libsodium-dev \
-        lbzip2 \
-        libfftw3-dev \
-        libmysqlclient-dev \
-        default-libmysqlclient-dev \
-        libgdal-dev \
-        gdal-bin \
-        libgeos-dev \
-        libgsl0-dev \
-        libgl1-mesa-dev \
-        libglu1-mesa-dev \
-        libhdf4-alt-dev \
-        libhdf5-dev \
-        libjq-dev \
-        # liblwgeom-dev \
-        libpq-dev \
-        libproj-dev \
-        libprotobuf-dev \
-        libnetcdf-dev \
-        libnetcdff-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        libudunits2-dev \
-        netcdf-bin \
-        postgis \
-        protobuf-compiler \
-        sqlite3 \
-        tk-dev \
-        libv8-dev \
-        unixodbc-dev \
-        gfortran \
-        liblapack-dev \
-        libblas-dev \
-        libspatialindex-dev \
-        build-essential \
-        libffi-dev \
-        libxslt1-dev \
-        zlib1g-dev \
-        libspatialindex-dev \
-        libfribidi-dev \
-        libharfbuzz-dev \
-        pandoc
+# RUN apt-get update -qq \
+#     && apt-get -y --no-install-recommends install \
+#         libxml2-dev \
+#         libcairo2-dev \
+#         libsqlite-dev \
+#         libpq-dev \
+#         libssh2-1-dev \
+#         unixodbc-dev \
+#         libsasl2-dev \
+#         libssl-dev \
+#         libcurl4-openssl-dev \
+#         libsodium-dev \
+#         lbzip2 \
+#         libfftw3-dev \
+#         libmysqlclient-dev \
+#         default-libmysqlclient-dev \
+#         libgdal-dev \
+#         gdal-bin \
+#         libgeos-dev \
+#         libgsl0-dev \
+#         libgl1-mesa-dev \
+#         libglu1-mesa-dev \
+#         libhdf4-alt-dev \
+#         libhdf5-dev \
+#         libjq-dev \
+#         # liblwgeom-dev \
+#         libpq-dev \
+#         libproj-dev \
+#         libprotobuf-dev \
+#         libnetcdf-dev \
+#         libnetcdff-dev \
+#         libsqlite3-dev \
+#         libssl-dev \
+#         libudunits2-dev \
+#         netcdf-bin \
+#         postgis \
+#         protobuf-compiler \
+#         sqlite3 \
+#         tk-dev \
+#         libv8-dev \
+#         unixodbc-dev \
+#         gfortran \
+#         liblapack-dev \
+#         libblas-dev \
+#         libspatialindex-dev \
+#         build-essential \
+#         libffi-dev \
+#         libxslt1-dev \
+#         zlib1g-dev \
+#         libspatialindex-dev \
+#         libfribidi-dev \
+#         libharfbuzz-dev \
+#         pandoc
 
 RUN apt-get autoremove -y && \
     apt-get autoclean
+
+RUN apt-get update && \
+    apt-get install -y dos2unix
+
+RUN find /usr/local/bin/ -name "*.sh" -exec dos2unix {} \;
+
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID

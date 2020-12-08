@@ -23,7 +23,7 @@ python=dblodgett/hydrogeoenv-python:$python_TAG
 r=dblodgett/hydrogeoenv-r:$r_TAG
 custom=dblodgett/hydrogeoenv-custom:$custom_TAG
 
-docker build -t $linux --build-arg BASE_CONTAINER=ubuntu:bionic-20200630 --no-cache=$nocache_l linux/
+docker build -t $linux --build-arg BASE_CONTAINER=rocker/geospatial:dev-osgeo --no-cache=$nocache_l linux/
 docker build -t $python --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-linux:$r_TAG --no-cache=$nocache_p python/
 docker build -t $r --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-python:$linux_TAG --no-cache=$nocache_r r/
 docker build -t $custom --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-r:$r_TAG --no-cache=$nocache_c custom/
