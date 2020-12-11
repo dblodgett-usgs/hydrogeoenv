@@ -30,41 +30,47 @@ RUN install2.r --error \
     httr \
     curl \
     openssl \
-    tidyverse \
-    dplyr \
     devtools \
+    tidyverse \
+    codetools \
     RColorBrewer \
     RandomFields \
+    systemfonts \
+    svglite \
+    reticulate \
+    RSQLite \
     RNetCDF \
     classInt \
-    deldir \
-    gstat \
     hdf5r \
-    lidR \
-    mapdata \
-    maptools \
-    mapview \
     ncdf4 \
     proj4 \
     raster \
     rgdal \
     rgeos \
-    rlas \
     sf \
     sp \
+    dataRetrieval \
+    sbtools
+
+RUN install2.r --error \
+    --deps FALSE \
+    stars
+
+RUN install2.r --error \
+    --deps TRUE \
     spacetime \
     spatstat \
-    spdep \
     geoR \
     geosphere \
-    codetools \
-    dataRetrieval \
-    RSQLite \
-    systemfonts \
-    leafpop \
-    svglite \
-    reticulate \
-    sbtools
+    spdep \
+    deldir \
+    gstat \
+    lidR \
+    rlas \
+    mapdata \
+    maptools \
+    mapview \
+    leafpop
 
 RUN Rscript -e 'devtools::install_github("RBigData/pbdZMQ")'
 

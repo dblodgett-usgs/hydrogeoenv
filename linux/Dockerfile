@@ -194,8 +194,16 @@ RUN apt-get update -qq \
         libharfbuzz-dev \
         pandoc
 
+# Required for devtools on Groovy
+RUN apt-get update && apt-get install -y libgit2-dev
+
 RUN apt-get autoremove -y && \
     apt-get autoclean
+
+RUN apt-get update && \
+    apt-get install -y dos2unix
+
+RUN find /usr/local/bin/ -name "*.sh" -exec dos2unix {} \;
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
