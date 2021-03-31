@@ -7,28 +7,47 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 USER root
 
-RUN pip3 install -U --global-option=build_ext --global-option="-I/usr/include/gdal" GDAL==`gdal-config --version`
+RUN pip3 install -U \
+    --global-option=build_ext \
+    --global-option="-I/usr/include/gdal" \
+    gdal==`gdal-config --version`
 
 RUN pip3 install -U \
+    requests \
+    simplejson \
+    geopandas \
+    pygeos \
+    shapely \
+    rasterio \
+    xarray \
+    rioxarray \
+    scipy \
     dask \
-    bottleneck \
-    netCDF4 \
-    descartes \
     sparse \
+    bottleneck \
+    netcdf4 \
+    networkx \
+    matplotlib \
+    mapclassify \
+    contextily \
+    colorcet \
+    descartes \
     cmocean \
-    viscm \
-    colorspacious \
     seaborn \
     numba \
     pyarrow \
     spotpy \
-    rioxarray \
     osmnx \
     pint \
     numbagg \
     sympy \
-    hydrodata \
-    mapclassify \
+    nb_black \
+    jupyterlab-spellchecker \
+    python-igraph \
+    tqdm \
+    h5py \
+    tables \
+    psutil \
     git+https://github.com/eea/odfpy
 
 USER $NB_UID
