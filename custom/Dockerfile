@@ -26,10 +26,6 @@ RUN pip3 install -U \
 
 RUN Rscript -e 'devtools::install_github("USGS-R/USGSmarkdowntemplates")'
 
-RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor@v0.4.5.9010", upgrade = FALSE)'
-RUN install2.r --error snow
-RUN Rscript -e 'devtools::install_github("usgs-r/nhdplusTools@0715a76", upgrade = FALSE)'
-
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
