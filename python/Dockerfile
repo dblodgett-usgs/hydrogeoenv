@@ -12,6 +12,8 @@ RUN pip3 install -U \
     --global-option="-I/usr/include/gdal" \
     gdal==`gdal-config --version`
 
+RUN apt-get -y purge python3-simplejson
+
 RUN pip3 install -U \
     requests \
     simplejson \
@@ -51,4 +53,3 @@ RUN pip3 install -U \
     git+https://github.com/eea/odfpy
 
 USER $NB_UID
-

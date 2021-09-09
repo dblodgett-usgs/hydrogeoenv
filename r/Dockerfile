@@ -6,6 +6,8 @@ LABEL maintainer="David Blodgett <dblodgett@usgs.gov>"
 
 USER root
 
+RUN apt-get update &&apt-get install -y software-properties-common
+
 # From https://hub.docker.com/r/rocker/r-ubuntu/dockerfile
 RUN add-apt-repository --enable-source --yes "ppa:marutter/rrutter4.0"
 
