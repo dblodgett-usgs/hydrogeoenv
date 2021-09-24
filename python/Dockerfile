@@ -15,8 +15,9 @@ RUN pip3 install -U \
 RUN apt-get -y purge python3-simplejson
 
 RUN pip3 install -U \
-    requests \
+    requests-cache \
     simplejson \
+    ujson \
     geopandas \
     pygeos \
     shapely \
@@ -24,21 +25,17 @@ RUN pip3 install -U \
     xarray \
     rioxarray \
     scipy \
-    dask \
+    dask[complete]\
     sparse \
     bottleneck \
-    netcdf4 \
+    h5netcdf4 \
     networkx \
     matplotlib \
     mapclassify \
     contextily \
     colorcet \
-    descartes \
-    cmocean \
-    seaborn \
     numba \
     pyarrow \
-    spotpy \
     osmnx \
     pint \
     numbagg \
@@ -50,6 +47,7 @@ RUN pip3 install -U \
     h5py \
     tables \
     psutil \
+    proplot \
     git+https://github.com/eea/odfpy
 
 USER $NB_UID

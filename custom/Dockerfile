@@ -17,6 +17,7 @@ RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hygeo", upgrade = FALSE
 RUN install2.r --error reticulate
 
 RUN pip3 install -U \
+    git+https://github.com/cheginit/async_retriever.git \
     git+https://github.com/cheginit/pygeoogc.git \
     git+https://github.com/cheginit/pygeoutils.git \
     git+https://github.com/cheginit/pynhd.git \
