@@ -46,7 +46,7 @@ python=dblodgett/hydrogeoenv-python:$python_TAG
 r=dblodgett/hydrogeoenv-r:$r_TAG
 custom=dblodgett/hydrogeoenv-custom:$custom_TAG
 
-docker build -t $linux --build-arg BASE_CONTAINER=ubuntu:20.10$nocache_l linux/
+docker build -t $linux --build-arg BASE_CONTAINER=ubuntu:20.04$nocache_l linux/
 docker build -t $python --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-linux:$r_TAG$nocache_p python/
 docker build -t $r --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-python:$linux_TAG $nocache_r r/
 docker build -t $custom --build-arg BASE_CONTAINER=dblodgett/hydrogeoenv-r:$r_TAG$nocache_c custom/
