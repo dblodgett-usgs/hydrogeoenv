@@ -28,7 +28,7 @@ RUN pip3 install -U \
     dask[complete]\
     sparse \
     bottleneck \
-    h5netcdf4 \
+    h5netcdf \
     networkx \
     matplotlib \
     mapclassify \

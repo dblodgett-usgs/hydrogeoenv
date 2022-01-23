@@ -6,11 +6,7 @@ LABEL maintainer="David Blodgett <dblodgett@usgs.gov>"
 
 USER root
 
-RUN Rscript -e 'devtools::install_github("usgs-r/intersectr", upgrade = FALSE)'
-
 RUN Rscript -e 'devtools::install_github("usgs-r/nhdplusTools", upgrade = FALSE)'
-
-RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor@v0.4.6", upgrade = TRUE)'
 
 RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hygeo", upgrade = FALSE)'
 
@@ -24,8 +20,6 @@ RUN pip3 install -U \
     git+https://github.com/cheginit/py3dep.git \
     git+https://github.com/cheginit/pydaymet.git \
     git+https://github.com/cheginit/pygeohydro.git
-
-RUN Rscript -e 'devtools::install_github("USGS-R/USGSmarkdowntemplates")'
 
 RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor@v0.4.6.9003", upgrade = FALSE)'
 

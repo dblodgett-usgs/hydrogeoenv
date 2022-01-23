@@ -1,4 +1,4 @@
-ARG BASE_CONTAINER=ubuntu:20.10
+ARG BASE_CONTAINER=ubuntu:20.04
 
 FROM ${BASE_CONTAINER}
 
@@ -54,7 +54,11 @@ RUN apt-get update \
         libxext-dev \
         libxrender1 \
         lmodern \
-        netcat \
+        netcat
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive \
+    apt-get install -yq --no-install-recommends \
         python-dev \
         # ---- nbconvert dependencies ----
         texlive-xetex \
@@ -171,6 +175,7 @@ RUN apt-get update -qq \
         libprotobuf-dev \
         libnetcdf-dev \
         libnetcdff-dev \
+        nco \
         libsqlite3-dev \
         libssl-dev \
         libudunits2-dev \
