@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  hgenv-rstudio:
+    image: dblodgett/hydrogeoenv-rstudio:latest
+    container_name: hydrogeoenv-rstudio
+    user: root
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./workspace:/home/rstudio
+    command: >
+      /usr/lib/rstudio-server/bin/rserver --server-daemonize=0
