@@ -17,13 +17,13 @@ NOTE: When using these containers, consider rerunning a docker pull command regu
 $ docker pull dblodgett/hydrogeoenv-custom:latest
 ```
 
-As the project progresses, tagged versions will be established and those should be relied on going forward. 
- 
+As the project progresses, tagged versions will be established and those should be relied on going forward.
+
 There are two usage patterns for this system of containers.
 
 1. Via `docker-compose` where access is through jupyterlab on localhost
 
-In this mode, the server is started with the typical 
+In this mode, the server is started with the typical
 
 ```bash
 $ docker-compose up
@@ -48,6 +48,52 @@ docker run --mount type=bind,source="$(pwd)"/workspace,target=/jupyter dblodgett
 mv workspace/build/* docs/demo/hydrodata/
 ````
 See output: https://dblodgett-usgs.github.io/hydrogeoenv/demo/hydrodata/plot_nhdplus_python.html
+
+## USGS WSL2 Guidance
+
+For USGS users on windows, you may need help getting docker set up. as of 2/2/2022, the following worked.
+
+1. Work with your local IT admin to get added to the correct AD group and install the required software as described [here](https://tst.usgs.gov/operating-systems-2/windows-subsystem-for-linux/) (vpn required).
+1. in powershell, [install wsl](https://docs.microsoft.com/en-us/windows/wsl/install) and set the default version to 2.
+
+In powershell
+```sh
+wsl --install
+wsl --set-default-version 2
+wsl --list --online
+wsl --install -d Ubuntu-20.04
+# You may need to press enter in the screen that pops up to get it to run.
+wsl
+```
+
+You should now be in a running ubuntu 20.04 instance.
+
+See source and other goodies: https://code.chs.usgs.gov/jmfee/wsl-environment/-/blob/main/install.d/docker-ce.sh
+```sh
+sudo wget -O /usr/local/share/ca-certificates/DOIRootCA2.crt http://sslhelp.doi.net/docs/DOIRootCA2.cer
+sudo chmod 644 /usr/local/share/ca-certificates/DOIRootCA2.crt && sudo update-ca-certificates
+
+# from https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+# add apt repository
+if [ ! -f /etc/apt/sources.list.d/docker.list ]; then
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+  | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+fi
+
+# install
+sudo apt update
+sudo apt install -y docker-ce
+sudo usermod -a -G docker $USER
+sudo service docker start
+unset DOCKER_HOST
+
+docker run hello-world
+```
+
 
 ## Disclaimer
 

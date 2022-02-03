@@ -6,10 +6,6 @@ LABEL maintainer="David Blodgett <dblodgett@usgs.gov>"
 
 USER root
 
-RUN Rscript -e 'devtools::install_github("usgs-r/nhdplusTools", upgrade = FALSE)'
-
-RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hygeo", upgrade = FALSE)'
-
 RUN install2.r --error reticulate
 
 RUN pip3 install -U \
@@ -21,7 +17,16 @@ RUN pip3 install -U \
     git+https://github.com/cheginit/pydaymet.git \
     git+https://github.com/cheginit/pygeohydro.git
 
-RUN Rscript -e 'devtools::install_github("dblodgett-usgs/hyRefactor@v0.4.6.9003", upgrade = FALSE)'
+# to add to python layer.
+RUN apt-get update && apt-get install -y python3-venv
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+RUN bash Miniconda3-latest-Linux-x86_64.sh -b && rm -f Miniconda3-latest-Linux-x86_64.sh
+RUN chown -R 1000:100 /home/jovyan/.conda/
+
+ENV PATH=$PATH:/home/jovyan/miniconda3/bin
+
+RUN conda config --set auto_activate_base false
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
