@@ -28,6 +28,9 @@ ENV PATH=$PATH:/home/jovyan/miniconda3/bin
 
 RUN conda config --set auto_activate_base false
 
+# to add to linux layer
+RUN apt-get update && apt-get install -y awscli
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
