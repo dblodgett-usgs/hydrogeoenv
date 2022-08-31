@@ -31,6 +31,13 @@ RUN conda config --set auto_activate_base false
 # to add to linux layer
 RUN apt-get update && apt-get install -y awscli
 
+RUN Rscript -e 'remotes::install_github("dblodgett-usgs/hyRefactor@v0.4.8")'
+RUN Rscript -e 'remotes::install_github("usgs-r/nhdplusTools@v0.5.6")'
+
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+RUN apt-get -y install nodejs
+RUN npm install -g mapshaper
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
 
